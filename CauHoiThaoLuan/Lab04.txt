@@ -1,0 +1,28 @@
+================================================================================
+CÂU HỎI THẢO LUẬN – LAB 04: RELEASE FLOW & PHIÊN BẢN PHÁT HÀNH
+Học phần: IT3180 – Nhập môn Công nghệ phần mềm
+Sinh viên: Dương Đức Anh – MSSV: 202416126
+================================================================================
+
+Câu 1: Vì sao không nên dùng lightweight tag cho việc đánh dấu phiên bản phát hành?
+--------------------------------------------------------------------------------
+1. Phân biệt:
+   - Lightweight tag: Chỉ là một con trỏ trỏ tới commit (như một bookmark), không chứa thông tin tác giả, email, ngày giờ tạo hay lời chú thích lý do gắn tag.
+   - Annotated tag (git tag -a): Là một Git object đầy đủ, lưu trữ tên/email của người ký duyệt (tagger), dấu thời gian (timestamp), ghi chú phát hành (release message) và chữ ký số GPG.
+
+2. Lý do SCM bắt buộc dùng Annotated tag:
+   - Phiên bản phát hành là mốc chuẩn cấu hình (Baseline) chính thức được đóng băng và chuyển giao cho khách hàng hoặc đưa lên Production.
+   - Phục vụ Kiểm toán cấu hình (Configuration Audit): Cần xác định minh bạch ai là người chịu trách nhiệm phát hành, phát hành vào thời điểm nào, nội dung bao gồm những gì.
+   - Tương thích tự động với GitHub Releases và các công cụ đóng gói phát hành CI/CD.
+
+Câu 2: Sự khác biệt cốt lõi giữa "git describe" và "git log" là gì?
+--------------------------------------------------------------------------------
+1. "git log": Dùng để duyệt và hiển thị chi tiết toàn bộ lịch sử commit (SHA, tác giả, ngày giờ, commit message, diff). Phục vụ lập trình viên đọc lịch sử thay đổi mã nguồn.
+2. "git describe": Dùng để định vị vị trí hiện tại so với mốc chuẩn (tag có chú giải gần nhất). Sinh ra một chuỗi định danh phiên bản duy nhất dạng: <tag_gần_nhất>-<số_commit_đi_trước>-g<sha_rút_gọn>.
+3. Ví dụ thực tế: Sau khi tag v1.0.0 và thêm commit sort_cart, git describe trả về "v1.0.0-1-gcdb7673". Chuỗi này được sử dụng trong pipeline CI/CD để tự động sinh mã định danh bản dựng (build metadata).
+
+Câu 3: Lợi ích của việc duy trì tệp CHANGELOG.md theo chuẩn Keep a Changelog so với việc chỉ đọc git log?
+--------------------------------------------------------------------------------
+1. Hướng tới đúng đối tượng: git log chứa các chi tiết kỹ thuật nội bộ dành cho lập trình viên; CHANGELOG.md dành cho người dùng cuối, khách hàng, tester để nắm bắt giá trị thực tế của phiên bản mới.
+2. Phân loại khoa học theo chuẩn: Các mục Added, Changed, Deprecated, Removed, Fixed, Security giúp tra cứu nhanh chóng, có mục [Unreleased] theo dõi tính năng đang phát triển.
+3. Nhận diện thay đổi phá vỡ tương thích (Breaking Changes): Người dùng có thể đánh giá rủi ro khi nâng cấp phiên bản mà không cần đọc hàng trăm commit log phức tạp.
