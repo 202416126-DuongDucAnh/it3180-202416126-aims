@@ -15,6 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `search_by_category()`: tìm kiếm đĩa theo thể loại (không phân biệt chữ hoa/thường).
 - Bổ sung bộ kiểm thử tìm kiếm trong `tests/test_search.py`.
 
+## [1.0.1] - 2026-10-31
+
+### Fixed
+- Tìm kiếm theo tiêu đề (`search_by_title`) không phân biệt chữ hoa/thường (Refs #21).
+
 ## [1.0.0] - 2026-10-31
 
 ### Added
