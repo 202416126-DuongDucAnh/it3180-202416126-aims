@@ -33,6 +33,14 @@ class Cart:
         total = self.total_cost()
         return total * (1 - percent / 100.0)
 
+    def sort_by_title(self):
+        """Sắp xếp các đĩa trong giỏ hàng theo tiêu đề (A-Z)."""
+        self.items.sort(key=lambda d: d.title)
+
+    def sort_by_cost(self):
+        """Sắp xếp các đĩa trong giỏ hàng theo giá tiền tăng dần."""
+        self.items.sort(key=lambda d: d.cost)
+
     def print_cart(self):
         print("***********************CART***********************")
         print("Ordered Items:")
