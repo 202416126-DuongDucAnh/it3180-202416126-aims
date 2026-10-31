@@ -6,9 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.1.0] - 2026-10-31
+
 ### Added
 - `Cart.sort_by_title()`: sắp xếp các đĩa theo tên theo thứ tự chữ cái A-Z.
 - `Cart.sort_by_cost()`: sắp xếp các đĩa theo giá tiền tăng dần.
+- `search_by_category()`: tìm kiếm đĩa theo thể loại (không phân biệt chữ hoa/thường).
+- Bổ sung bộ kiểm thử tìm kiếm trong `tests/test_search.py`.
 
 ## [1.0.0] - 2026-10-31
 
