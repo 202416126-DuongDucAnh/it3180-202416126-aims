@@ -1,0 +1,18 @@
+Câu 1: Cấu hình --global được lưu ở đâu? Khác gì so với --local?
+- --global: Được lưu trong file .gitconfig tại thư mục Home của người dùng (ví dụ: C:\Users\<Tên_User>\.gitconfig).
+- Cấu hình này có phạm vi áp dụng trên tất cả các repository của người dùng hiện tại trên máy tính.
+- --local: Được lưu trong file .git/config tại thư mục gốc của repository cụ thể và chỉ có hiệu lực đối với riêng repository đó.
+- Sự khác biệt chính: Nằm ở vị trí lưu trữ, phạm vi áp dụng và mức độ ưu tiên của cấu hình.
+- Thứ tự ưu tiên: --local > --global > --system. Khi các cấp cấu hình có giá trị khác nhau, Git sẽ ưu tiên giá trị ở cấp có phạm vi hẹp hơn (--local).
+
+Câu 2: Vì sao sử dụng git mv? release/lab01 có phải baseline không? Vì sao không commit trực tiếp lên master dù chỉ làm việc một mình?
+- Lý do sử dụng git mv:
+  + Giúp di chuyển hoặc đổi tên file mà Git vẫn nhận diện liên tục sự thay đổi, bảo toàn toàn bộ lịch sử commit của file (theo dõi được bằng git log --follow).
+  + Tự động đưa thao tác di chuyển vào Staging Area, không cần thực hiện thêm lệnh git add.
+- Vai trò của release/lab01:
+  + Được sử dụng như một nhánh Baseline (mốc chuẩn cấu hình), đánh dấu trạng thái hoàn thành và ổn định của Lab 01.
+  + Đóng băng phiên bản để nộp bài và làm cơ sở tham chiếu, phát triển cho các bài thực hành tiếp theo.
+- Lý do không commit trực tiếp lên master dù chỉ làm một mình:
+  + Giữ cho nhánh master luôn ở trạng thái ổn định (clean & runnable), chứa phiên bản code đã hoàn thiện và hạn chế tối đa lỗi phát sinh.
+  + Tuân thủ quy trình kiểm soát thay đổi (Change Control) trong SCM: Tách biệt quá trình phát triển, thử nghiệm và sửa lỗi khỏi nhánh chính.
+  + Rèn luyện quy trình làm việc chuẩn công nghiệp: Mọi thay đổi đều đóng gói trong nhánh tính năng/tái cấu trúc và đi qua Pull Request để kiểm tra tích hợp trước khi hợp nhất.
