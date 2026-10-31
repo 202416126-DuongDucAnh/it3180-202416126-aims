@@ -1,0 +1,35 @@
+================================================================================
+CÂU HỎI THẢO LUẬN – LAB 02: FEATURE/TOPIC FLOW & PULL REQUEST
+Học phần: IT3180 – Nhập môn Công nghệ phần mềm
+Sinh viên: Dương Đức Anh – MSSV: 202416126
+================================================================================
+
+Câu 1: Khi nào nên dùng Merge commit? Khi nào nên dùng Squash? Khi nào nên dùng Rebase?
+--------------------------------------------------------------------------------
+1. Merge commit (git merge --no-ff):
+   - Bản chất: Tạo ra một commit hợp nhất có 2 nhánh cha, bảo toàn trọn vẹn mọi commit riêng lẻ cùng hình thái đồ thị (topology) của nhánh tính năng.
+   - Khi nào nên dùng: Hợp nhất các nhánh tính năng lớn (epic features), các bản phát hành (release branches) hoặc khi nhiều lập trình viên cùng làm việc chung trên một nhánh. Giúp duy trì lịch sử chi tiết phục vụ kiểm toán cấu hình.
+   - Nhược điểm: Đồ thị Git (git log --graph) có thể trở nên rối rắm nếu lạm dụng cho các tính năng nhỏ.
+
+2. Squash and merge (git merge --squash):
+   - Bản chất: Gộp toàn bộ các commit trên nhánh tính năng thành 1 commit duy nhất trên nhánh đích (master).
+   - Khi nào nên dùng: Thích hợp cho các nhánh tính năng nhỏ, sửa lỗi ngắn hạn hoặc các PR có nhiều commit vụn vặt thử nghiệm ("wip", "fix typo"). Giúp lịch sử nhánh chính luôn tuyến tính, gọn gàng và dễ revert/bisect.
+   - Nhược điểm: Mất chi tiết lịch sử từng bước thực hiện nhỏ trên nhánh tính năng.
+
+3. Rebase and merge (git rebase):
+   - Bản chất: Đặt lại gốc nhánh tính năng lên đỉnh mới nhất của nhánh đích rồi fast-forward. Giữ nguyên từng commit riêng rẽ nhưng viết lại mã băm (SHA), tạo lịch sử hoàn toàn thẳng hàng.
+   - Khi nào nên dùng: Khi các commit trên nhánh tính năng đã được trau chuốt kỹ lưỡng (atomic, pass test, commit message chuẩn conventional commit) và đội ngũ muốn giữ linear history mà không làm mất chi tiết commit.
+   - Nhược điểm: Viết lại lịch sử commit SHAs; không giữ được ngữ cảnh nhánh tính năng từng tách ra ở đâu.
+
+Câu 2: Vì sao cần bật tùy chọn "Dismiss stale approvals"?
+--------------------------------------------------------------------------------
+- Bản chất: Khi tùy chọn này được kích hoạt trên Branch Protection Rules của GitHub, bất kỳ sự phê duyệt (Approve) nào trước đó sẽ tự động bị hủy (reset) ngay khi có commit mới được push lên nhánh PR.
+- Lý do bắt buộc bật:
+  1. Ngăn chặn lỗ hổng bảo mật hoặc lỗi phát sinh: Tránh trường hợp sau khi được đồng nghiệp duyệt PR, tác giả đẩy thêm code lỗi hoặc mã độc mà PR vẫn được merge tự động do phê duyệt cũ vẫn còn hiệu lực.
+  2. Đảm bảo tính toàn vẹn của quy trình Kiểm soát thay đổi (Change Control): Mọi sự thay đổi mã nguồn dù nhỏ nhất cũng đều phải được rà soát và chấp thuận lại trước khi tích hợp vào nhánh chính.
+
+Câu 3: Pull Request đóng vai trò gì trong mô hình quản lý cấu hình SCM?
+--------------------------------------------------------------------------------
+1. Cổng kiểm soát chất lượng (Quality Gate): Ngăn chặn mã lỗi đưa vào Baseline. PR tích hợp kiểm thử tự động CI (Unit test, linting) trước khi cho phép hợp nhất.
+2. Không gian phản biện mã nguồn (Peer Review): Cung cấp giao diện trực quan diff để các thành viên trao đổi, đánh giá kiến trúc, phát hiện sớm lỗi logic.
+3. Lưu vết và kiểm toán cấu hình (Configuration Audit Trail): Ghi nhận minh bạch lịch sử: Ai đề xuất, ai phê duyệt, lý do thay đổi là gì, kết quả kiểm thử ra sao. PR liên kết với GitHub Issue (Fixes #N) tạo chuỗi truy vết nguồn gốc thay đổi khép kín.
