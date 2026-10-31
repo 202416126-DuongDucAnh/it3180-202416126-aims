@@ -26,6 +26,11 @@ class Cart:
     def total_cost(self):
         return sum(item.cost for item in self.items)
 
+    def apply_discount(self, percent):
+        """Áp dụng mã giảm giá."""
+        total = self.total_cost()
+        return total * (1 - percent)
+
     def print_cart(self):
         print("***********************CART***********************")
         print("Ordered Items:")
