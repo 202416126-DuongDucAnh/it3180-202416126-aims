@@ -1,0 +1,30 @@
+================================================================================
+CÂU HỎI THẢO LUẬN – LAB 05: HOTFIX FLOW & BẢO TRÌ NHIỀU PHIÊN BẢN
+Học phần: IT3180 – Nhập môn Công nghệ phần mềm
+Sinh viên: Dương Đức Anh – MSSV: 202416126
+================================================================================
+
+Câu 1: Ưu và nhược điểm của chiến lược "upstream first" so với "release first" là gì?
+--------------------------------------------------------------------------------
+1. Chiến lược "Upstream First" (Sửa trên master trước rồi cherry-pick sang release):
+   - Bản chất: Áp dụng ở dự án lớn (Microsoft, Linux Kernel). Vá lỗi vào master trước, sau đó cherry-pick về các nhánh release cần hỗ trợ.
+   - Ưu điểm: Đảm bảo master không bao giờ bị quên sửa lỗi (never regress), không sợ lỗi tái xuất hiện ở các bản phát hành tương lai; kiểm thử với bộ testsuite hiện đại nhất.
+   - Nhược điểm: Phản ứng chậm hơn khi cần cấp hotfix khẩn cấp cho khách hàng (time-to-production); dễ xung đột nếu master đã phát triển quá xa.
+
+2. Chiến lược "Release First" (Sửa trên nhánh release lỗi trước rồi lan truyền về master):
+   - Bản chất: Mô hình trong Lab 05. Tạo hotfix từ release/lab04, vá lỗi và đóng gói phát hành patch v1.0.1 ngay, sau đó cherry-pick -x về master và release/lab05.
+   - Ưu điểm: Phản ứng khẩn cấp tức thì, không làm gián đoạn sprint phát triển trên master; tương thích tuyệt đối với môi trường release đang vận hành.
+   - Nhược điểm: Nguy cơ bỏ quên lan truyền (forgotten backport / hotfix regression) nếu thiếu quy trình kiểm toán; đòi hỏi kiểm toán cấu hình nghiêm ngặt (git cherry).
+
+Câu 2: Nếu lỡ quên lan truyền bản sửa lỗi sang nhánh release/lab05, lệnh kiểm toán nào ở Phần F sẽ giúp phát hiện ra thiếu sót?
+--------------------------------------------------------------------------------
+1. Lệnh "git cherry -v release/lab05 release/lab04":
+   - So sánh các commit theo nội dung thực tế (patch-id).
+   - Nếu commit sửa lỗi trên release/lab04 chưa có trên release/lab05, Git sẽ đánh dấu cộng "+" trước commit đó. Nếu đã có thì có dấu "-" hoặc không xuất hiện.
+
+2. Lệnh "git log --all --oneline --decorate --grep='make title search case-insensitive'":
+   - Liệt kê các ref đang chứa commit sửa lỗi. Nếu thiếu ref release/lab05, kiểm toán viên sẽ phát hiện ngay.
+
+3. Vòng lặp kiểm thử ma trận đa phiên bản (Multi-version Matrix Audit):
+   - Chạy test tìm kiếm 'lion' trong 'The Lion King' lần lượt trên v1.0.1, v1.1.0 và master.
+   - Kỳ vọng: Cả 3 ref đều in ra 1. Nếu release/lab05 (v1.1.0) bị quên vá, kết quả trả về sẽ là 0 thay vì 1.
