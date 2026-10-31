@@ -1,0 +1,34 @@
+================================================================================
+CÂU HỎI THẢO LUẬN – LAB 03: BUGFIX FLOW, XUNG ĐỘT & HOÀN TÁC
+Học phần: IT3180 – Nhập môn Công nghệ phần mềm
+Sinh viên: Dương Đức Anh – MSSV: 202416126
+================================================================================
+
+Câu 1: Merge base là gì và Git dùng merge base như thế nào để phát hiện xung đột?
+--------------------------------------------------------------------------------
+1. Định nghĩa Merge base:
+   - Merge base là commit tổ tiên chung gần nhất (best common ancestor) giữa hai nhánh (hoặc hai commit) bất kỳ trong đồ thị DAG của Git.
+   - Xác định bằng lệnh: git merge-base <branchA> <branchB>.
+
+2. Thuật toán Three-way Merge và phát hiện xung đột:
+   - Khi hợp nhất hai nhánh (Theirs gộp vào Ours), Git đối chiếu 3 trạng thái:
+     + Base (B): Trạng thái tại commit Merge Base.
+     + Ours (A): Trạng thái trên nhánh hiện tại đang đứng.
+     + Theirs (C): Trạng thái trên nhánh được gộp vào.
+   - Cơ chế phát hiện xung đột:
+     + Nếu chỉ A đổi so với B -> Git giữ nguyên thay đổi của A.
+     + Nếu chỉ C đổi so với B -> Git lấy thay đổi của C.
+     + Nếu cả A và C cùng đổi giống hệt nhau so với B -> Git tự động hợp nhất bình thường.
+     + Nếu cả A và C cùng sửa đổi trên cùng một vùng dòng mã theo cách KHÁC NHAU so với B (hoặc một bên sửa, một bên xóa) -> Git phát hiện xung đột (Conflict) và chèn các thẻ <<<<<<< HEAD, =======, >>>>>>> để con người can thiệp giải quyết.
+
+Câu 2: Vì sao trên các nhánh chung như master hay release/* bắt buộc phải hoàn tác bằng revert thay vì reset?
+--------------------------------------------------------------------------------
+1. Tác hại của git reset trên nhánh công khai:
+   - git reset (nhất là --hard) di chuyển con trỏ nhánh lùi về quá khứ và xóa bỏ các commit.
+   - Khi commit đã được push lên server chung, muốn cập nhật phải dùng git push --force.
+   - Thao tác này viết lại lịch sử (rewrite history), phá vỡ môi trường làm việc của toàn bộ nhóm, gây xung đột nghiêm trọng khi các thành viên khác pull về.
+
+2. Tính an toàn và chuẩn mực của git revert:
+   - Cơ chế: Tạo ra một COMMIT MỚI có nội dung đảo ngược lại thay đổi của commit lỗi, không làm mất bất kỳ commit nào trong quá khứ.
+   - Lịch sử tuyến tính, chỉ tiến về phía trước (append-only), không cần dùng --force, an toàn cho mọi cộng tác viên.
+   - Bảo toàn dấu vết kiểm toán cấu hình SCM (Configuration Audit Trail): Ghi nhận minh bạch lịch sử ai đã revert, lý do revert qua Pull Request.
