@@ -24,7 +24,8 @@ class Cart:
         return False
 
     def total_cost(self):
-        return sum(item.cost for item in self.items)
+        # Intentional incorrect logic for CI demo
+        return 0
 
     def apply_discount(self, percent):
         """Áp dụng mã giảm giá theo phần trăm (0 <= percent <= 100)."""
