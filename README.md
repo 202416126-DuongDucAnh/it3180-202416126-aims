@@ -5,32 +5,35 @@
 - **Sinh viên:** Dương Đức Anh
 - **MSSV:** 202416126
 
----
+## Chạy và kiểm thử
 
-## 1. Yêu cầu môi trường
-- **Python:** Phiên bản `>= 3.10` (khuyến nghị Python 3.12).
-- Không yêu cầu cài đặt thư viện bên thứ ba (chỉ sử dụng thư viện chuẩn của Python: `unittest`, `sys`...).
-
----
-
-## 2. Hướng dẫn sử dụng
-
-### Chạy chương trình mô phỏng chính:
+Yêu cầu Python >= 3.10 (chỉ dùng thư viện chuẩn). Từ thư mục gốc repo:
 ```bash
 python main.py
-```
-Chương trình sẽ khởi tạo danh sách DVD mẫu, thêm đĩa vào giỏ hàng, in thông tin giỏ hàng và tổng tiền.
-
-### Chạy kiểm thử tự động (Unit Tests):
-```bash
 python -m unittest discover -s tests -v
 ```
-Toàn bộ 11 test cases kiểm tra nghiệp vụ của Cart và Search sẽ được thực thi tự động.
+`main.py` in phiên bản và tổng tiền mẫu `63.89 $`. CI chạy bộ test tự động cho Pull Request vào `master` hoặc `release/*`.
 
----
+## Báo cáo trả lời câu hỏi thảo luận
 
-## 3. Cấu trúc thư mục dự án
-- `aims/`: Gói mã nguồn nghiệp vụ chính (`dvd.py`, `cart.py`, `search.py`).
-- `tests/`: Bộ kiểm thử đơn vị tự động (`test_cart.py`, `test_search.py`).
-- `docs/`: Tài liệu đặc tả ca sử dụng (`use-case.md`) và câu hỏi thảo luận các bài lab (`answers-lab01.md` -> `answers-lab05.md`).
-- `.github/`: Mẫu Pull Request template và cấu hình luồng CI tự động (`workflows/ci.yml`).
+Tài liệu chi tiết tại [docs/](docs/) (kèm đặc tả [use-case.md](docs/use-case.md)):
+
+| Lab | Nội dung | Báo cáo |
+| :---: | --- | --- |
+| 01 | Git cơ bản, refactor, baseline | [answers-lab01.md](docs/answers-lab01.md) |
+| 02 | Feature/topic, PR và ba kiểu merge | [answers-lab02.md](docs/answers-lab02.md) |
+| 03 | Bugfix, xung đột, revert | [answers-lab03.md](docs/answers-lab03.md) |
+| 04 | Release, SemVer, tag và kiểm toán | [answers-lab04.md](docs/answers-lab04.md) |
+| 05 | Hotfix, cherry-pick và bảo trì nhiều phiên bản | [answers-lab05.md](docs/answers-lab05.md) |
+
+## Các mốc bài nộp
+
+| Lab | Nhánh bài nộp | Tag |
+| :---: | --- | --- |
+| 01 | `release/lab01` | `v0.1.0` |
+| 02 | `release/lab02` | `v0.2.0` |
+| 03 | `release/lab03` | `v0.3.0` |
+| 04 | `release/lab04` | `v1.0.0`, `v1.0.1` (hotfix) |
+| 05 | `release/lab05` | `v1.1.0` |
+
+`master` là dòng phát triển chính. Lịch sử Git ghi lại các nhánh refactor, feature, bugfix, release và hotfix; test lỗi giỏ hàng và giảm giá được ghi trước commit sửa. Bản sửa tìm kiếm không phân biệt hoa thường được cherry-pick với `-x` vào `master` và `release/lab05`.
